@@ -142,13 +142,23 @@ export default function RecordGrid({
     }
   }
 
-  const genres = [...new Set(records.map((r) => r.genre).filter(Boolean))].sort();
+  const genres = [
+    ...new Set(
+      records.flatMap((r) =>
+        r.genre
+          ? r.genre.split(',').map((g) => g.trim()).filter(Boolean)
+          : []
+      )
+    ),
+  ].sort();
 
   const filtered = records.filter((r) => {
     const q = search.toLowerCase();
     const matchesSearch =
       !q || r.title.toLowerCase().includes(q) || r.artist.toLowerCase().includes(q);
-    const matchesGenre = !genreFilter || r.genre === genreFilter;
+    const matchesGenre =
+      !genreFilter ||
+      r.genre.split(',').map((g) => g.trim()).includes(genreFilter);
     return matchesSearch && matchesGenre;
   });
 
