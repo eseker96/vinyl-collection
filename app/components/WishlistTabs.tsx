@@ -17,26 +17,44 @@ export default function WishlistTabs({
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-end justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold">Wishlist</h1>
-          <p className="text-stone-500 text-sm mt-0.5">
+          <p
+            className="text-[10px] tracking-[0.35em] uppercase mb-1"
+            style={{ color: 'var(--ember)', fontFamily: 'var(--font-space-mono)' }}
+          >
+            ▸ Side B
+          </p>
+          <h1
+            className="text-3xl font-bold italic leading-none"
+            style={{ color: 'var(--paper)', fontFamily: 'var(--font-playfair)' }}
+          >
+            Wishlist
+          </h1>
+          <p
+            className="text-xs tracking-widest uppercase mt-2"
+            style={{ color: 'var(--paper-dim)', fontFamily: 'var(--font-space-mono)' }}
+          >
             {records.length} record{records.length !== 1 ? 's' : ''}
           </p>
         </div>
         <AddRecordForm defaultType="wishlist" defaultOwner={tab} />
       </div>
 
-      <div className="flex gap-1 mb-6 bg-stone-100 p-1 rounded-xl w-fit">
+      {/* Tabs */}
+      <div className="flex gap-px mb-8" style={{ borderBottom: '1px solid var(--groove)' }}>
         {(['Ece', 'Renke'] as const).map((name) => (
           <button
             key={name}
             onClick={() => setTab(name)}
-            className={`px-5 py-1.5 rounded-lg font-medium text-sm transition-colors ${
-              tab === name
-                ? 'bg-white text-stone-900 shadow-sm'
-                : 'text-stone-500 hover:text-stone-700'
-            }`}
+            className="px-6 py-2 text-xs tracking-[0.2em] uppercase transition-colors"
+            style={{
+              fontFamily: 'var(--font-space-mono)',
+              color: tab === name ? 'var(--ember)' : 'var(--paper-muted)',
+              borderBottom: tab === name ? '2px solid var(--ember)' : '2px solid transparent',
+              marginBottom: '-1px',
+              background: 'transparent',
+            }}
           >
             {name}
           </button>

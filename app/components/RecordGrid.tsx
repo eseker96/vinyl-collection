@@ -19,9 +19,7 @@ export default function RecordGrid({
   const filtered = records.filter((r) => {
     const q = search.toLowerCase();
     const matchesSearch =
-      !q ||
-      r.title.toLowerCase().includes(q) ||
-      r.artist.toLowerCase().includes(q);
+      !q || r.title.toLowerCase().includes(q) || r.artist.toLowerCase().includes(q);
     const matchesGenre = !genreFilter || r.genre === genreFilter;
     return matchesSearch && matchesGenre;
   });
@@ -33,26 +31,38 @@ export default function RecordGrid({
         : 'Your wishlist is empty.'
       : 'No records match your search.';
 
+  const inputStyle = {
+    background: 'var(--sleeve-input)',
+    border: '1px solid var(--groove)',
+    color: 'var(--paper)',
+    fontFamily: 'var(--font-space-mono)',
+    fontSize: '0.75rem',
+    letterSpacing: '0.02em',
+    outline: 'none',
+  };
+
   return (
     <div>
-      <div className="flex gap-3 mb-6">
+      <div className="flex gap-3 mb-8">
         <input
           type="text"
-          placeholder="Search by title or artist..."
+          placeholder="SEARCH TITLE OR ARTIST..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 px-4 py-2 rounded-lg border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white"
+          className="flex-1 px-4 py-2.5 rounded-sm"
+          style={inputStyle}
         />
         {genres.length > 0 && (
           <select
             value={genreFilter}
             onChange={(e) => setGenreFilter(e.target.value)}
-            className="px-4 py-2 rounded-lg border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white"
+            className="px-4 py-2.5 rounded-sm"
+            style={{ ...inputStyle, minWidth: '9rem' }}
           >
-            <option value="">All genres</option>
+            <option value="">ALL GENRES</option>
             {genres.map((g) => (
               <option key={g} value={g}>
-                {g}
+                {g.toUpperCase()}
               </option>
             ))}
           </select>
@@ -60,9 +70,14 @@ export default function RecordGrid({
       </div>
 
       {filtered.length === 0 ? (
-        <p className="text-stone-400 text-center py-20">{emptyMessage}</p>
+        <p
+          className="text-center py-20 tracking-widest uppercase text-xs"
+          style={{ color: 'var(--paper-muted)', fontFamily: 'var(--font-space-mono)' }}
+        >
+          {emptyMessage}
+        </p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {filtered.map((record) => (
             <RecordCard key={record.id} record={record} />
           ))}
@@ -70,8 +85,11 @@ export default function RecordGrid({
       )}
 
       {records.length > 0 && (
-        <p className="text-stone-400 text-sm mt-6 text-center">
-          {filtered.length} of {records.length} record{records.length !== 1 ? 's' : ''}
+        <p
+          className="text-center mt-8 tracking-widest uppercase text-xs"
+          style={{ color: 'var(--paper-muted)', fontFamily: 'var(--font-space-mono)' }}
+        >
+          {filtered.length} / {records.length} records
         </p>
       )}
     </div>

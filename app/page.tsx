@@ -7,10 +7,24 @@ export default async function CollectionPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-end justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold">My Collection</h1>
-          <p className="text-stone-500 text-sm mt-0.5">
+          <p
+            className="text-[10px] tracking-[0.35em] uppercase mb-1"
+            style={{ color: 'var(--ember)', fontFamily: 'var(--font-space-mono)' }}
+          >
+            ▸ Side A
+          </p>
+          <h1
+            className="text-3xl font-bold italic leading-none"
+            style={{ color: 'var(--paper)', fontFamily: 'var(--font-playfair)' }}
+          >
+            My Collection
+          </h1>
+          <p
+            className="text-xs tracking-widest uppercase mt-2"
+            style={{ color: 'var(--paper-dim)', fontFamily: 'var(--font-space-mono)' }}
+          >
             {records.length} LP{records.length !== 1 ? 's' : ''}
           </p>
         </div>

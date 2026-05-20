@@ -1,5 +1,24 @@
 @import "tailwindcss";
 
+:root {
+  --ink: #0f0d0a;
+  --paper: #ede0c8;
+  --paper-dim: #907a64;
+  --paper-muted: #5a4a3a;
+  --sleeve: #1c1916;
+  --sleeve-hi: #252118;
+  --sleeve-input: #1a1714;
+  --ember: #d4651a;
+  --ember-dark: #b8520f;
+  --groove: #2e2820;
+  --groove-hi: #3a3128;
+}
+
 body {
+  background-color: var(--ink);
+  /* faint paper grain */
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n' x='0' y='0'><feTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='300' height='300' filter='url(%23n)' opacity='.07'/></svg>");
+  background-repeat: repeat;
+  color: var(--paper);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
