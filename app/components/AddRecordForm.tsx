@@ -139,6 +139,19 @@ export default function AddRecordForm({
                 </div>
               </div>
 
+              {defaultType === 'wishlist' && (
+                <div>
+                  <label className="block mb-1.5" style={labelStyle}>
+                    Priority
+                  </label>
+                  <select name="priority" defaultValue="Medium" className={inputClass} style={inputStyle}>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                  </select>
+                </div>
+              )}
+
               <div>
                 <label className="block mb-1.5" style={labelStyle}>
                   Notes

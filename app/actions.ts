@@ -14,6 +14,7 @@ export async function addRecordAction(formData: FormData) {
     type,
     owner: ((formData.get('owner') as string) || '').trim(),
     cover_url: '',
+    priority: ((formData.get('priority') as string) || 'Medium') as 'High' | 'Medium' | 'Low',
   });
   revalidatePath('/');
   revalidatePath('/wishlist');

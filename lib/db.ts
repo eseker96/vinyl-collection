@@ -16,6 +16,7 @@ export type VinylRecord = {
   owner: string;
   created_at: string;
   cover_url: string;
+  priority: 'High' | 'Medium' | 'Low';
 };
 
 export async function getRecords(type: 'owned' | 'wishlist'): Promise<VinylRecord[]> {
@@ -36,8 +37,8 @@ export async function getWishlistByOwner(owner: string): Promise<VinylRecord[]> 
 
 export async function addRecord(data: Omit<VinylRecord, 'id' | 'created_at'>): Promise<void> {
   await client.execute({
-    sql: 'INSERT INTO records (title, artist, genre, year, notes, type, owner) VALUES (?, ?, ?, ?, ?, ?, ?)',
-    args: [data.title, data.artist, data.genre, data.year, data.notes, data.type, data.owner],
+    sql: 'INSERT INTO records (title, artist, genre, year, notes, type, owner, priority) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+    args: [data.title, data.artist, data.genre, data.year, data.notes, data.type, data.owner, data.priority ?? 'Medium'],
   });
 }
 

@@ -4,6 +4,12 @@ import { useTransition } from 'react';
 import type { VinylRecord } from '@/lib/db';
 import { deleteRecordAction, moveToOwnedAction } from '@/app/actions';
 
+const PRIORITY_STYLES = {
+  High:   { color: '#e05555', background: 'rgba(224,85,85,0.12)',   label: '▲ High'   },
+  Medium: { color: '#c9a227', background: 'rgba(201,162,39,0.12)',  label: '● Medium' },
+  Low:    { color: '#6b7280', background: 'rgba(107,114,128,0.12)', label: '▼ Low'    },
+};
+
 function VinylArt() {
   return (
     <svg viewBox="0 0 200 200" className="w-full h-full" aria-hidden>
@@ -96,6 +102,24 @@ export default function RecordCard({ record }: { record: VinylRecord }) {
         </div>
 
         <div className="flex flex-wrap gap-1.5">
+          {record.type === 'wishlist' && record.priority && (() => {
+            const s = PRIORITY_STYLES[record.priority] ?? PRIORITY_STYLES.Medium;
+            return (
+              <span
+                className="px-2 py-0.5 rounded-sm"
+                style={{
+                  background: s.background,
+                  color: s.color,
+                  fontFamily: 'var(--font-space-mono)',
+                  fontSize: '0.6rem',
+                  letterSpacing: '0.04em',
+                  fontWeight: 700,
+                }}
+              >
+                {s.label}
+              </span>
+            );
+          })()}
           {record.genre && (
             <span
               className="px-2 py-0.5 rounded-sm"

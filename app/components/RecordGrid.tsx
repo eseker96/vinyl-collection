@@ -6,7 +6,14 @@ import RecordCard from './RecordCard';
 import { deleteRecordAction, moveToOwnedAction } from '@/app/actions';
 
 type View = 'grid' | 'table';
-type SortKey = 'title' | 'artist' | 'year' | 'genre';
+type SortKey = 'title' | 'artist' | 'year' | 'genre' | 'priority';
+
+const PRIORITY_ORDER: Record<string, number> = { High: 0, Medium: 1, Low: 2 };
+const PRIORITY_STYLES: Record<string, { color: string; background: string; label: string }> = {
+  High:   { color: '#e05555', background: 'rgba(224,85,85,0.12)',   label: '▲ High'   },
+  Medium: { color: '#c9a227', background: 'rgba(201,162,39,0.12)',  label: '● Medium' },
+  Low:    { color: '#6b7280', background: 'rgba(107,114,128,0.12)', label: '▼ Low'    },
+};
 
 function TableRow({ record }: { record: VinylRecord }) {
   const [isPending, startTransition] = useTransition();
@@ -69,6 +76,23 @@ function TableRow({ record }: { record: VinylRecord }) {
           </span>
         )}
       </td>
+      {record.type === 'wishlist' && (
+        <td style={{ padding: '0.65rem 0.75rem' }}>
+          {(() => {
+            const s = PRIORITY_STYLES[record.priority] ?? PRIORITY_STYLES.Medium;
+            return (
+              <span style={{
+                background: s.background, color: s.color,
+                fontFamily: 'var(--font-space-mono)', fontSize: '0.6rem',
+                letterSpacing: '0.04em', fontWeight: 700,
+                padding: '0.2rem 0.5rem', borderRadius: '2px', whiteSpace: 'nowrap',
+              }}>
+                {s.label}
+              </span>
+            );
+          })()}
+        </td>
+      )}
       <td style={{ padding: '0.65rem 0.75rem' }}>
         <div style={{ display: 'flex', gap: '0.25rem', justifyContent: 'flex-end' }}>
           {record.type === 'wishlist' && (
@@ -119,6 +143,7 @@ export default function RecordGrid({
 }) {
   const [search, setSearch] = useState('');
   const [genreFilter, setGenreFilter] = useState('');
+  const [priorityFilter, setPriorityFilter] = useState('');
   const [view, setView] = useState<View>('grid');
   const [sortBy, setSortBy] = useState<SortKey>('artist');
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
@@ -159,12 +184,18 @@ export default function RecordGrid({
     const matchesGenre =
       !genreFilter ||
       r.genre.split(',').map((g) => g.trim()).includes(genreFilter);
-    return matchesSearch && matchesGenre;
+    const matchesPriority = !priorityFilter || r.priority === priorityFilter;
+    return matchesSearch && matchesGenre && matchesPriority;
   });
 
   const displayed =
     view === 'table'
       ? [...filtered].sort((a, b) => {
+          if (sortBy === 'priority') {
+            const diff =
+              (PRIORITY_ORDER[a.priority] ?? 1) - (PRIORITY_ORDER[b.priority] ?? 1);
+            return sortDir === 'asc' ? diff : -diff;
+          }
           const av = (a[sortBy] ?? '').toLowerCase();
           const bv = (b[sortBy] ?? '').toLowerCase();
           return sortDir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av);
@@ -240,6 +271,19 @@ export default function RecordGrid({
             ))}
           </select>
         )}
+        {type === 'wishlist' && (
+          <select
+            value={priorityFilter}
+            onChange={(e) => setPriorityFilter(e.target.value)}
+            className="px-4 py-2.5 rounded-sm"
+            style={{ ...inputStyle, minWidth: '8rem' }}
+          >
+            <option value="">ALL PRIORITY</option>
+            <option value="High">▲ HIGH</option>
+            <option value="Medium">● MEDIUM</option>
+            <option value="Low">▼ LOW</option>
+          </select>
+        )}
         <div className="flex gap-1 shrink-0">
           <button
             onClick={() => switchView('grid')}
@@ -288,6 +332,9 @@ export default function RecordGrid({
                     { key: 'artist', label: 'Artist' },
                     { key: 'year', label: 'Year' },
                     { key: 'genre', label: 'Genre' },
+                    ...(type === 'wishlist'
+                      ? [{ key: 'priority' as SortKey, label: 'Priority' }]
+                      : []),
                   ] as { key: SortKey; label: string }[]
                 ).map(({ key, label }) => (
                   <th key={key} style={thStyle(key)} onClick={() => handleSort(key)}>
