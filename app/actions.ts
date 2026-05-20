@@ -13,6 +13,7 @@ export async function addRecordAction(formData: FormData) {
     notes: ((formData.get('notes') as string) || '').trim(),
     type,
     owner: ((formData.get('owner') as string) || '').trim(),
+    cover_url: '',
   });
   revalidatePath('/');
   revalidatePath('/wishlist');
