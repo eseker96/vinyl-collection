@@ -15,6 +15,7 @@ export type VinylRecord = {
   type: 'owned' | 'wishlist';
   owner: string;
   created_at: string;
+  cover_url: string;
 };
 
 export async function getRecords(type: 'owned' | 'wishlist'): Promise<VinylRecord[]> {

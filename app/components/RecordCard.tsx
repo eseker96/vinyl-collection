@@ -36,8 +36,23 @@ export default function RecordCard({ record }: { record: VinylRecord }) {
         boxShadow: '2px 4px 20px rgba(0,0,0,0.55)',
       }}
     >
-      <div className="aspect-square w-full">
-        <VinylArt />
+      <div className="aspect-square w-full relative overflow-hidden">
+        {record.cover_url ? (
+          <img
+            src={record.cover_url}
+            alt={`${record.title} by ${record.artist}`}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              const target = e.currentTarget;
+              target.style.display = 'none';
+              const fallback = target.nextElementSibling as HTMLElement;
+              if (fallback) fallback.style.display = 'block';
+            }}
+          />
+        ) : null}
+        <div style={{ display: record.cover_url ? 'none' : 'block' }} className="w-full h-full">
+          <VinylArt />
+        </div>
       </div>
 
       <div className="p-3 flex flex-col gap-2" style={{ borderTop: '1px solid var(--groove)' }}>
